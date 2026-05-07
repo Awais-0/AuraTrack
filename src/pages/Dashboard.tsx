@@ -3,23 +3,23 @@ import { BentoCard } from '@/src/components/BentoCard';
 import { Responsive, WidthProvider } from 'react-grid-layout/legacy';
 import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
-import { 
-  Clock, 
-  TrendingUp, 
-  Zap, 
-  Activity, 
-  MousePointer2, 
+import {
+  Clock,
+  TrendingUp,
+  Zap,
+  Activity,
+  MousePointer2,
   Monitor,
   Flame,
   Calendar
 } from 'lucide-react';
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   BarChart,
   Bar,
@@ -77,7 +77,7 @@ export function Dashboard() {
   };
 
   return (
-    <div className="flex-1 h-full overflow-y-auto mesh-gradient custom-scrollbar">
+    <div className="flex-1 h-full overflow-y-auto custom-scrollbar">
       <header className="p-8 pb-0">
         <div className="flex justify-between items-end">
           <div>
@@ -149,9 +149,9 @@ export function Dashboard() {
                   <BarChart data={weeklyData}>
                     <Bar dataKey="hours" radius={[4, 4, 0, 0]}>
                       {weeklyData.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={index === 3 ? '#a855f7' : 'rgba(168, 85, 247, 0.1)'} 
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={index === 3 ? '#a855f7' : 'rgba(168, 85, 247, 0.1)'}
                           className="transition-all duration-300"
                         />
                       ))}
@@ -211,9 +211,9 @@ export function Dashboard() {
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                     <XAxis dataKey="time" hide />
                     <YAxis hide />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'rgba(5, 5, 5, 0.8)', 
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'rgba(5, 5, 5, 0.8)',
                         border: '1px solid rgba(255,255,255,0.1)',
                         borderRadius: '16px',
                         backdropFilter: 'blur(10px)',
@@ -221,12 +221,12 @@ export function Dashboard() {
                       }}
                       itemStyle={{ color: '#fff' }}
                     />
-                    <Area 
-                      type="monotone" 
-                      dataKey="value" 
-                      stroke="#a855f7" 
+                    <Area
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#a855f7"
                       strokeWidth={3}
-                      fill="url(#colorValueP)" 
+                      fill="url(#colorValueP)"
                     />
                   </AreaChart>
                 </ResponsiveContainer>

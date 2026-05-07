@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen w-full bg-[#050505] overflow-hidden">
+    <div className="flex h-screen w-full mesh-gradient overflow-hidden">
       <Sidebar />
       <main className="flex-1 overflow-hidden">
         {children}
@@ -47,14 +47,14 @@ export default function App() {
         {/* Auth Routes */}
         <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
         <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
-        
+
         {/* Protected Dashboard Routes */}
         <Route path="/" element={
           <DashboardLayout>
             <PageWrapper><Dashboard /></PageWrapper>
           </DashboardLayout>
         } />
-        
+
         {/* Placeholders for other routes */}
         <Route path="/sessions" element={
           <DashboardLayout>
