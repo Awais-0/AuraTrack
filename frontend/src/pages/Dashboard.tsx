@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BentoCard } from '@/src/components/BentoCard';
+import { fetchHealth } from '@/src/lib/api';
 import { Responsive, WidthProvider } from 'react-grid-layout/legacy';
 import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
@@ -71,6 +72,19 @@ const initialLayouts = {
 
 export function Dashboard() {
   const [layouts, setLayouts] = useState(initialLayouts);
+  const [apiStatus, setApiStatus] = useState<'online' | 'offline' | 'checking'>('checking');
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        await fetchHealth();
+        setApiStatus('online');
+      } catch (error) {
+        setApiStatus('offline');
+      }
+    };
+    checkStatus();
+  }, []);
 
   const onLayoutChange = (currentLayout: any, allLayouts: any) => {
     setLayouts(allLayouts);
@@ -85,6 +99,12 @@ export function Dashboard() {
             <p className="text-white/40 font-medium">Tracking your digital flow across all devices</p>
           </div>
           <div className="flex items-center gap-4">
+            <div className={`glass px-4 py-2 rounded-2xl flex items-center gap-3 cursor-default border ${apiStatus === 'online' ? 'border-emerald-500/50' : 'border-rose-500/50'}`}>
+              <div className={`w-2 h-2 rounded-full ${apiStatus === 'online' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]' : apiStatus === 'offline' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]' : 'bg-white/20 animate-pulse'}`} />
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                API: {apiStatus}
+              </span>
+            </div>
             <div className="glass px-4 py-2 rounded-2xl flex items-center gap-3 cursor-default">
               <Calendar className="w-5 h-5 text-indigo-400" />
               <span className="text-sm font-semibold">May 4, 2026</span>
