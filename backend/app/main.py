@@ -2,15 +2,21 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import os
-from dotenv import load_dotenv
+from contextlib import asynccontextmanager
+from app.db.init_db import init_db
 
-# Load environment variables
-load_dotenv()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Initialize Database
+    init_db()
+    yield
+    # Shutdown: Clean up if needed
 
 app = FastAPI(
     title="AuraTrack API",
     description="Backend API for AuraTrack productivity tracker",
-    version="0.1.0"
+    version="0.1.0",
+    lifespan=lifespan
 )
 
 # CORS configuration
