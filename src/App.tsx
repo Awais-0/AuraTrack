@@ -7,6 +7,11 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './pages/Dashboard';
+import { Sessions } from './pages/Sessions';
+import { Analytics } from './pages/Analytics';
+import { Goals } from './pages/Goals';
+import { Settings } from './pages/Settings';
+import { Profile } from './pages/Profile';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { motion, AnimatePresence } from 'motion/react';
@@ -58,37 +63,27 @@ export default function App() {
         {/* Placeholders for other routes */}
         <Route path="/sessions" element={
           <DashboardLayout>
-            <PageWrapper>
-              <div className="flex items-center justify-center h-full text-white/20 font-black text-6xl uppercase tracking-tighter">Sessions</div>
-            </PageWrapper>
+            <PageWrapper><Sessions /></PageWrapper>
           </DashboardLayout>
         } />
         <Route path="/analytics" element={
           <DashboardLayout>
-            <PageWrapper>
-              <div className="flex items-center justify-center h-full text-white/20 font-black text-6xl uppercase tracking-tighter">Analytics</div>
-            </PageWrapper>
+            <PageWrapper><Analytics /></PageWrapper>
           </DashboardLayout>
         } />
         <Route path="/goals" element={
           <DashboardLayout>
-            <PageWrapper>
-              <div className="flex items-center justify-center h-full text-white/20 font-black text-6xl uppercase tracking-tighter">Goals</div>
-            </PageWrapper>
+            <PageWrapper><Goals /></PageWrapper>
           </DashboardLayout>
         } />
         <Route path="/settings" element={
           <DashboardLayout>
-            <PageWrapper>
-              <div className="flex items-center justify-center h-full text-white/20 font-black text-6xl uppercase tracking-tighter">Settings</div>
-            </PageWrapper>
+            <PageWrapper><Settings /></PageWrapper>
           </DashboardLayout>
         } />
         <Route path="/profile" element={
           <DashboardLayout>
-            <PageWrapper>
-              <div className="flex items-center justify-center h-full text-white/20 font-black text-6xl uppercase tracking-tighter">Profile</div>
-            </PageWrapper>
+            <PageWrapper><Profile /></PageWrapper>
           </DashboardLayout>
         } />
 
