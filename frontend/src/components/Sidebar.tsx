@@ -58,19 +58,29 @@ export function Sidebar() {
         collapsed ? "justify-center" : "justify-between"
       )}>
         <div className={cn(
-          "flex items-center gap-3",
+          "flex items-center gap-3 overflow-hidden",
           collapsed && "justify-center w-full"
         )}>
-          <div className="w-10 h-10 shrink-0 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.4)]">
-            <Activity className="text-white w-6 h-6" />
-          </div>
-          {!collapsed && (
-            <motion.span 
+
+          {!collapsed ? (
+            <motion.span
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               className="font-black text-2xl tracking-tighter bg-gradient-to-r from-white to-white/40 bg-clip-text text-transparent"
             >
-              Pulse<span className="text-indigo-400">OS</span>
+              <div className="w-40 h-10 shrink-0 rounded-2xl flex items-center justify-center overflow-hidden">
+                <img src="assets/logo/PulseOSWide.png" alt="PulseOS" className="w-full h-full object-cover" />
+              </div>
+            </motion.span>
+          ) : (
+            <motion.span
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="font-black text-2xl tracking-tighter bg-gradient-to-r from-white to-white/40 bg-clip-text text-transparent"
+            >
+              <div className="w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center overflow-hidden">
+                <img src="assets/logo/PulseOS.png" alt="PulseOS" className="w-full h-full object-cover" />
+              </div>
             </motion.span>
           )}
         </div>
@@ -175,4 +185,4 @@ export function Sidebar() {
       </div>
     </aside>
   );
-}
+}

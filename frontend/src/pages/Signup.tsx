@@ -49,8 +49,8 @@ export function Signup() {
         className="w-full max-w-md glass p-10 rounded-[40px] relative z-10"
       >
         <div className="flex flex-col items-center mb-10">
-          <div className="w-16 h-16 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-xl shadow-indigo-500/20 mb-6 group cursor-pointer">
-            <Activity className="text-white w-8 h-8 group-hover:scale-110 transition-transform" />
+          <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center shadow-xl shadow-indigo-500/10 mb-6 group cursor-pointer border border-white/5 overflow-hidden">
+            <img src="assets/logo/PulseOS.png" alt="PulseOS" className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
           </div>
           <h2 className="text-3xl font-black tracking-tight mb-2">Join PulseOS</h2>
           <p className="text-white/40 font-medium">Start tracking your personal velocity</p>
@@ -72,8 +72,9 @@ export function Signup() {
           <div className="space-y-2">
             <label className="text-xs font-bold text-white/50 uppercase tracking-widest ml-1">Username</label>
             <div className="relative group">
-              <input 
-                type="text" 
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-indigo-400 transition-colors" />
+              <input
+                type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="username"
@@ -87,8 +88,8 @@ export function Signup() {
             <label className="text-xs font-bold text-white/50 uppercase tracking-widest ml-1">Email Address</label>
             <div className="relative group">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-indigo-400 transition-colors" />
-              <input 
-                type="email" 
+              <input
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="user@pulse.os"
@@ -102,8 +103,8 @@ export function Signup() {
             <label className="text-xs font-bold text-white/50 uppercase tracking-widest ml-1">Password</label>
             <div className="relative group">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-indigo-400 transition-colors" />
-              <input 
-                type="password" 
+              <input
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -113,7 +114,7 @@ export function Signup() {
             </div>
           </div>
 
-          <button 
+          <button
             type="submit"
             disabled={loading || success}
             className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-500/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group mt-4"

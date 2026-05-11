@@ -166,14 +166,14 @@ export function Dashboard() {
                     <ArrowUpRight className="w-5 h-5" />
                   </div>
                 </div>
-                
+
                 <div className="flex-1 min-h-0 -mx-6 -mb-6 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={financeData}>
                       <defs>
                         <linearGradient id="colorFinance" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <Area type="monotone" dataKey="amount" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorFinance)" />
@@ -276,7 +276,7 @@ export function Dashboard() {
                 </div>
                 <div className="h-12 -mx-2 opacity-30 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={[40, 70, 45, 90, 65, 80, 50].map(v => ({v}))}>
+                    <BarChart data={[40, 70, 45, 90, 65, 80, 50].map(v => ({ v }))}>
                       <Bar dataKey="v" fill="#6366f1" radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
@@ -284,6 +284,7 @@ export function Dashboard() {
               </div>
             </BentoCard>
           </div>
+
           <div key="media">
             <BentoCard delay={0.5}>
               <div className="flex flex-col h-full">
@@ -305,13 +306,13 @@ export function Dashboard() {
                           <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
                         ))}
                       </Pie>
-                      <Tooltip 
-                        contentStyle={{ 
-                          background: 'rgba(5,5,5,0.9)', 
-                          border: '1px solid rgba(255,255,255,0.1)', 
+                      <Tooltip
+                        contentStyle={{
+                          background: 'rgba(5,5,5,0.9)',
+                          border: '1px solid rgba(255,255,255,0.1)',
                           borderRadius: '12px',
                           fontSize: '10px'
-                        }} 
+                        }}
                       />
                     </PieChart>
                   </ResponsiveContainer>
