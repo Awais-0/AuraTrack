@@ -13,10 +13,10 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const navItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/' },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
   { id: 'sessions', label: 'Sessions', icon: Clock, path: '/sessions' },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics' },
   { id: 'goals', label: 'Goals', icon: Target, path: '/goals' },
@@ -29,9 +29,15 @@ const secondaryItems = [
 
 export function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
   const toggleCollapse = () => setCollapsed(prev => !prev);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   return (
     <aside
@@ -146,6 +152,7 @@ export function Sidebar() {
       {/* Logout button */}
       <div className={cn("p-6", collapsed && "p-4")}>
         <button
+          onClick={handleLogout}
           className={cn(
             "flex items-center gap-4 w-full rounded-2xl text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors duration-300",
             collapsed ? "justify-center px-2 py-3" : "px-4 py-3"
@@ -158,4 +165,4 @@ export function Sidebar() {
       </div>
     </aside>
   );
-}
+}

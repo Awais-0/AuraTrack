@@ -1,9 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Zap, Mail, Lock, ArrowRight, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Zap, Mail, Lock, ArrowRight, User, Loader2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { signup } from '@/src/lib/api';
 
 export function Signup() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      await signup({
+        username,
+        email,
+        password,
+        is_active: true
+      });
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Registration failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 mesh-gradient relative overflow-hidden">
       {/* Decorative blurs */}
@@ -24,14 +56,29 @@ export function Signup() {
           <p className="text-white/40 font-medium">Start tracking your digital velocity</p>
         </div>
 
-        <form className="space-y-5">
+        {error && (
+          <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm font-bold">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-bold">
+            Account created successfully! Redirecting to login...
+          </div>
+        )}
+
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label className="text-xs font-bold text-white/50 uppercase tracking-widest ml-1">Full Name</label>
+            <label className="text-xs font-bold text-white/50 uppercase tracking-widest ml-1">Username</label>
             <div className="relative group">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-purple-400 transition-colors" />
               <input 
                 type="text" 
-                placeholder="Ark"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="ark"
+                required
                 className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-medium placeholder:text-white/20"
               />
             </div>
@@ -43,7 +90,10 @@ export function Signup() {
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-purple-400 transition-colors" />
               <input 
                 type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="ark@aura.co"
+                required
                 className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-medium placeholder:text-white/20"
               />
             </div>
@@ -55,15 +105,28 @@ export function Signup() {
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-purple-400 transition-colors" />
               <input 
                 type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
+                required
                 className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-4 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-medium placeholder:text-white/20"
               />
             </div>
           </div>
 
-          <button className="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-purple-500/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group mt-4">
-            Create Free Account
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          <button 
+            type="submit"
+            disabled={loading || success}
+            className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-2xl shadow-lg shadow-purple-500/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group mt-4"
+          >
+            {loading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <>
+                Create Free Account
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </>
+            )}
           </button>
         </form>
 

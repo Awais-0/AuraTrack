@@ -18,4 +18,9 @@ class Settings(BaseSettings):
         f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
     )
 
+    # JWT Settings
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-super-secret-key-for-development")
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+
 settings = Settings()

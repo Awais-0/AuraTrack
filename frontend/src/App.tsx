@@ -45,6 +45,17 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
   );
 }
 
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const token = localStorage.getItem('token');
+  const location = useLocation();
+
+  if (!token) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
+}
+
 export default function App() {
   return (
     <Router>
@@ -54,41 +65,53 @@ export default function App() {
         <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
 
         {/* Protected Dashboard Routes */}
-        <Route path="/" element={
-          <DashboardLayout>
-            <PageWrapper><Dashboard /></PageWrapper>
-          </DashboardLayout>
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Dashboard /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
         } />
 
-        {/* Placeholders for other routes */}
         <Route path="/sessions" element={
-          <DashboardLayout>
-            <PageWrapper><Sessions /></PageWrapper>
-          </DashboardLayout>
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Sessions /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
         } />
         <Route path="/analytics" element={
-          <DashboardLayout>
-            <PageWrapper><Analytics /></PageWrapper>
-          </DashboardLayout>
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Analytics /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
         } />
         <Route path="/goals" element={
-          <DashboardLayout>
-            <PageWrapper><Goals /></PageWrapper>
-          </DashboardLayout>
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Goals /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
         } />
         <Route path="/settings" element={
-          <DashboardLayout>
-            <PageWrapper><Settings /></PageWrapper>
-          </DashboardLayout>
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Settings /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
         } />
         <Route path="/profile" element={
-          <DashboardLayout>
-            <PageWrapper><Profile /></PageWrapper>
-          </DashboardLayout>
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Profile /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
         } />
 
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Router>
   );

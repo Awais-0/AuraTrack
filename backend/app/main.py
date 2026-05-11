@@ -4,6 +4,9 @@ import uvicorn
 import os
 from contextlib import asynccontextmanager
 from app.db.init_db import init_db
+from app.api.v1.api import api_router
+from app.core.config import settings
+from app.core.handlers import setup_handlers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,16 +16,27 @@ async def lifespan(app: FastAPI):
     # Shutdown: Clean up if needed
 
 app = FastAPI(
-    title="AuraTrack API",
+    title=settings.PROJECT_NAME,
     description="Backend API for AuraTrack productivity tracker",
     version="0.1.0",
     lifespan=lifespan
 )
 
+# Setup Handlers & Middleware
+setup_handlers(app)
+
+# Include Routers
+app.include_router(api_router, prefix=settings.API_V1_STR)
+
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=[
+        "http://localhost:3001",
+        "http://localhost:3000",
+        "http://127.0.0.1:3001",
+        "http://127.0.0.1:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
