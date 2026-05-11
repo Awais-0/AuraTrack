@@ -2,23 +2,29 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   LayoutDashboard,
-  Clock,
-  BarChart3,
+  Wallet,
+  HeartPulse,
+  Gamepad2,
+  Film,
+  Target,
   Settings,
   LogOut,
   User,
   Zap,
-  Target,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Activity
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
-  { id: 'sessions', label: 'Sessions', icon: Clock, path: '/sessions' },
-  { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics' },
+  { id: 'productivity', label: 'Productivity', icon: Zap, path: '/productivity' },
+  { id: 'finance', label: 'Finance', icon: Wallet, path: '/finance' },
+  { id: 'health', label: 'Health', icon: HeartPulse, path: '/health' },
+  { id: 'gaming', label: 'Gaming', icon: Gamepad2, path: '/gaming' },
+  { id: 'media', label: 'Media', icon: Film, path: '/media' },
   { id: 'goals', label: 'Goals', icon: Target, path: '/goals' },
 ];
 
@@ -43,25 +49,29 @@ export function Sidebar() {
     <aside
       className={cn(
         "h-full glass border-r border-white/5 flex flex-col z-50 transition-all duration-300 ease-in-out",
-        collapsed ? "w-20" : "w-64"
+        collapsed ? "w-20" : "w-72"
       )}
     >
       {/* Logo & Toggle */}
       <div className={cn(
-        "p-6 flex items-center transition-all",
+        "p-8 flex items-center transition-all",
         collapsed ? "justify-center" : "justify-between"
       )}>
         <div className={cn(
           "flex items-center gap-3",
           collapsed && "justify-center w-full"
         )}>
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 flex-shrink-0">
-            <Zap className="text-white w-6 h-6" />
+          <div className="w-10 h-10 shrink-0 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.4)]">
+            <Activity className="text-white w-6 h-6" />
           </div>
           {!collapsed && (
-            <span className="font-bold text-xl tracking-tight text-white/90 whitespace-nowrap">
-              AuraTrack
-            </span>
+            <motion.span 
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="font-black text-2xl tracking-tighter bg-gradient-to-r from-white to-white/40 bg-clip-text text-transparent"
+            >
+              Pulse<span className="text-indigo-400">OS</span>
+            </motion.span>
           )}
         </div>
         <button
@@ -75,7 +85,7 @@ export function Sidebar() {
         </button>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2 mt-4">
+      <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto custom-scrollbar">
         {/* Main Menu label */}
         {!collapsed && (
           <div className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] px-4 mb-4">

@@ -7,9 +7,12 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './pages/Dashboard';
-import { Sessions } from './pages/Sessions';
-import { Analytics } from './pages/Analytics';
+import { Productivity } from './pages/Productivity';
 import { Goals } from './pages/Goals';
+import { Finance } from './pages/Finance';
+import { Health } from './pages/Health';
+import { Gaming } from './pages/Gaming';
+import { Media } from './pages/Media';
 import { Settings } from './pages/Settings';
 import { Profile } from './pages/Profile';
 import { Login } from './pages/Login';
@@ -64,7 +67,7 @@ export default function App() {
         <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
         <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
 
-        {/* Protected Dashboard Routes */}
+        {/* Protected Life Tracker Routes */}
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <DashboardLayout>
@@ -73,20 +76,46 @@ export default function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/sessions" element={
+        <Route path="/productivity" element={
           <ProtectedRoute>
             <DashboardLayout>
-              <PageWrapper><Sessions /></PageWrapper>
+              <PageWrapper><Productivity /></PageWrapper>
             </DashboardLayout>
           </ProtectedRoute>
         } />
-        <Route path="/analytics" element={
+
+        <Route path="/finance" element={
           <ProtectedRoute>
             <DashboardLayout>
-              <PageWrapper><Analytics /></PageWrapper>
+              <PageWrapper><Finance /></PageWrapper>
             </DashboardLayout>
           </ProtectedRoute>
         } />
+
+        <Route path="/health" element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Health /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/gaming" element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Gaming /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/media" element={
+          <ProtectedRoute>
+            <DashboardLayout>
+              <PageWrapper><Media /></PageWrapper>
+            </DashboardLayout>
+          </ProtectedRoute>
+        } />
+
         <Route path="/goals" element={
           <ProtectedRoute>
             <DashboardLayout>
@@ -94,6 +123,7 @@ export default function App() {
             </DashboardLayout>
           </ProtectedRoute>
         } />
+
         <Route path="/settings" element={
           <ProtectedRoute>
             <DashboardLayout>
@@ -101,6 +131,7 @@ export default function App() {
             </DashboardLayout>
           </ProtectedRoute>
         } />
+
         <Route path="/profile" element={
           <ProtectedRoute>
             <DashboardLayout>

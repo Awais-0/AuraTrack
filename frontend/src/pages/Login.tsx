@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Zap, Mail, Lock, ArrowRight, Github, Loader2 } from 'lucide-react';
+import { Activity, Mail, Lock, ArrowRight, Github, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '@/src/lib/api';
 import { useApi } from '@/src/hooks/useApi';
@@ -40,11 +40,11 @@ export function Login() {
         className="w-full max-w-md glass p-10 rounded-[40px] relative z-10"
       >
         <div className="flex flex-col items-center mb-10">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xl shadow-indigo-500/20 mb-6 group cursor-pointer">
-            <Zap className="text-white w-8 h-8 group-hover:scale-110 transition-transform" />
+          <div className="w-16 h-16 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-xl shadow-indigo-500/20 mb-6 group cursor-pointer">
+            <Activity className="text-white w-8 h-8 group-hover:scale-110 transition-transform" />
           </div>
-          <h2 className="text-3xl font-black tracking-tight mb-2">Welcome Back</h2>
-          <p className="text-white/40 font-medium">Continue your digital journey</p>
+          <h2 className="text-3xl font-black tracking-tight mb-2">Welcome to PulseOS</h2>
+          <p className="text-white/40 font-medium">Your life, synchronized</p>
         </div>
 
         {error && (
@@ -117,7 +117,7 @@ export function Login() {
         </div>
 
         <p className="text-center mt-8 text-sm text-white/40 font-medium">
-          New to Aura? <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 transition-colors font-bold">Create Account</Link>
+          New to PulseOS? <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 transition-colors font-bold">Create Account</Link>
         </p>
       </motion.div>
     </div>
