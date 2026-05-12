@@ -19,7 +19,6 @@ import {
   Camera,
   ChevronRight,
   Star,
-  Loader2,
   Briefcase,
   Info
 } from 'lucide-react';
@@ -28,6 +27,7 @@ import { Button } from '@/src/components/Button';
 import { Modal } from '@/src/components/Modal';
 import { getProfile, updateProfile, uploadAvatar, uploadBanner } from '@/src/lib/api';
 import { useNavigate } from 'react-router-dom';
+import Loader from '@/src/components/CustomLoader';
 
 export function Profile() {
   const [profile, setProfile] = useState<any>(null);
@@ -153,16 +153,9 @@ export function Profile() {
       setIsUpdating(false);
     }
   };
-
-  if (loading && !profile) {
-    return (
-      <div className="flex-1 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
-      </div>
-    );
-  }
   return (
     <div className="flex-1 h-full overflow-y-auto custom-scrollbar">
+      {(loading || isUpdating) && <Loader />}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -498,7 +491,7 @@ export function Profile() {
               className="flex-1"
               disabled={isUpdating}
             >
-              {isUpdating ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save Changes'}
+              {isUpdating ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         </form>

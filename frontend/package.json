@@ -1,9 +1,9 @@
 {
-  "name": "auratrack",
+  "name": "pulseos",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Muhammad Awais Raza",
-  "description": "Productivity Tracker",
+  "description": "Banda Tracker",
   "type": "module",
   "scripts": {
     "dev": "vite --port=3001 --host=0.0.0.0",
@@ -27,6 +27,7 @@
     "react-grid-layout": "^2.2.3",
     "react-router-dom": "^7.14.2",
     "recharts": "^3.8.1",
+    "styled-components": "^6.4.1",
     "tailwind-merge": "^3.5.0",
     "vite": "^6.2.3"
   },

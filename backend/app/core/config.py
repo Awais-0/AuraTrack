@@ -8,15 +8,17 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "PulseOS"
     API_V1_STR: str = "/api/v1"
     
-    POSTGRES_SERVER: str = os.getenv("DATABASE_HOSTNAME")
-    POSTGRES_USER: str = os.getenv("DATABASE_USERNAME")
-    POSTGRES_PASSWORD: str = os.getenv("DATABASE_PASSWORD")
-    POSTGRES_DB: str = os.getenv("DATABASE_NAME")
-    POSTGRES_PORT: str = os.getenv("DATABASE_PORT")
+    POSTGRES_SERVER: str = os.getenv("DATABASE_HOSTNAME", "").strip()
+    POSTGRES_USER: str = os.getenv("DATABASE_USERNAME", "").strip()
+    POSTGRES_PASSWORD: str = os.getenv("DATABASE_PASSWORD", "").strip()
+    POSTGRES_DB: str = os.getenv("DATABASE_NAME", "").strip()
+    POSTGRES_PORT: str = os.getenv("DATABASE_PORT", "").strip()
     
-    SQLALCHEMY_DATABASE_URI: str = (
-        f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
-    )
+    @property
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
+        from urllib.parse import quote_plus
+        return f"postgresql://{self.POSTGRES_USER}:{quote_plus(self.POSTGRES_PASSWORD)}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+
 
     # JWT Settings
     SECRET_KEY: str = os.getenv("SECRET_KEY")
