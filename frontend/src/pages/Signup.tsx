@@ -6,6 +6,7 @@ import { signup } from '@/src/lib/api';
 
 export function Signup() {
   const [username, setUsername] = useState('');
+  const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,7 @@ export function Signup() {
     try {
       await signup({
         username,
+        fullname,
         email,
         password,
         is_active: true
@@ -69,6 +71,21 @@ export function Signup() {
         )}
 
         <form className="space-y-5" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-white/50 uppercase tracking-widest ml-1">Full Name</label>
+            <div className="relative group">
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30 group-focus-within:text-indigo-400 transition-colors" />
+              <input
+                type="text"
+                value={fullname}
+                onChange={(e) => setFullname(e.target.value)}
+                placeholder="John Doe"
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-4 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all font-medium placeholder:text-white/20"
+              />
+            </div>
+          </div>
+
           <div className="space-y-2">
             <label className="text-xs font-bold text-white/50 uppercase tracking-widest ml-1">Username</label>
             <div className="relative group">

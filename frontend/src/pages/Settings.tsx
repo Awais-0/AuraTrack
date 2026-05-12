@@ -1,13 +1,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { 
-  User, 
-  Bell, 
-  Shield, 
-  Monitor, 
-  Globe, 
-  Database, 
-  Github, 
+import {
+  User,
+  Bell,
+  Shield,
+  Monitor,
+  Globe,
+  Database,
+  Github,
   Cloud,
   Mail,
   Lock,
@@ -36,7 +36,7 @@ export function Settings() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Left Column: Profile & Main Settings */}
           <div className="xl:col-span-2 space-y-8">
-            
+
             {/* Account Profile Card */}
             <section className="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
               <div className="flex flex-col md:flex-row md:items-center gap-8 relative z-10">
@@ -52,7 +52,7 @@ export function Settings() {
                   <h3 className="text-2xl font-bold tracking-tight mb-1">Awais Raza</h3>
                   <p className="text-white/40 text-sm mb-4">Productivity Architect • Pro Member</p>
                   <div className="flex flex-wrap gap-3">
-                    <Button variant="primary" size="sm">Edit Profile</Button>
+                    {/* <Button variant="primary" size="sm">Edit Profile</Button> */}
                     <Button variant="glass" size="sm">Upgrade Plan</Button>
                   </div>
                 </div>
@@ -63,31 +63,31 @@ export function Settings() {
             {/* Settings Sections */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
-                { 
-                  title: 'Notifications', 
-                  desc: 'Configure session alerts & goal reminders', 
-                  icon: Bell, 
+                {
+                  title: 'Notifications',
+                  desc: 'Configure session alerts & goal reminders',
+                  icon: Bell,
                   color: 'text-amber-400',
                   bg: 'bg-amber-400/10'
                 },
-                { 
-                  title: 'Privacy & Security', 
-                  desc: 'Manage your data and encryption keys', 
-                  icon: Shield, 
+                {
+                  title: 'Privacy & Security',
+                  desc: 'Manage your data and encryption keys',
+                  icon: Shield,
                   color: 'text-emerald-400',
                   bg: 'bg-emerald-400/10'
                 },
-                { 
-                  title: 'App Experience', 
-                  desc: 'Theme, layout and visual preferences', 
-                  icon: Monitor, 
+                {
+                  title: 'App Experience',
+                  desc: 'Theme, layout and visual preferences',
+                  icon: Monitor,
                   color: 'text-indigo-400',
                   bg: 'bg-indigo-400/10'
                 },
-                { 
-                  title: 'Data Export', 
-                  desc: 'Download your focus history in JSON/CSV', 
-                  icon: Database, 
+                {
+                  title: 'Data Export',
+                  desc: 'Download your focus history in JSON/CSV',
+                  icon: Database,
                   color: 'text-purple-400',
                   bg: 'bg-purple-400/10'
                 },
@@ -178,8 +178,8 @@ export function Settings() {
               <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
                 <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2">Last Synchronized</div>
                 <div className="text-sm font-bold flex items-center gap-2">
-                   Today, 04:12 PM
-                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Today, 04:12 PM
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 </div>
               </div>
             </section>

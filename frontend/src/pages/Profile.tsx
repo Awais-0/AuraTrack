@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import {
   User,
@@ -12,17 +12,155 @@ import {
   Twitter,
   Linkedin,
   Clock,
+  LogOut,
   Target,
   Mail,
   Edit2,
   Camera,
   ChevronRight,
-  Star
+  Star,
+  Loader2,
+  Briefcase,
+  Info
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { Button } from '@/src/components/Button';
+import { Modal } from '@/src/components/Modal';
+import { getProfile, updateProfile, uploadAvatar, uploadBanner } from '@/src/lib/api';
+import { useNavigate } from 'react-router-dom';
 
 export function Profile() {
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isBannerModalOpen, setIsBannerModalOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const bannerInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
+  const bannerTemplates = [
+    '/assets/banners/banner1.jpg',
+    '/assets/banners/banner2.jpg',
+    '/assets/banners/banner3.jpg',
+    '/assets/banners/banner4.jpg',
+    '/assets/banners/banner5.jpg',
+  ];
+
+  // Form state
+  const [formData, setFormData] = useState({
+    fullname: '',
+    occupation: '',
+    address: '',
+    about: '',
+    github_url: '',
+    twitter_url: '',
+    linkedin_url: ''
+  });
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
+
+  const fetchProfileData = async () => {
+    try {
+      setLoading(true);
+      const data = await getProfile();
+      setProfile(data);
+      setFormData({
+        fullname: data.fullname || '',
+        occupation: data.occupation || '',
+        address: data.address || '',
+        about: data.about || '',
+        github_url: data.github_url || '',
+        twitter_url: data.twitter_url || '',
+        linkedin_url: data.linkedin_url || ''
+      });
+    } catch (error) {
+      console.error('Failed to fetch profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsUpdating(true);
+      await updateProfile(formData);
+      await fetchProfileData();
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  const handleAvatarClick = () => {
+    avatarInputRef.current?.click();
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setLoading(true);
+      await uploadAvatar(file);
+      await fetchProfileData();
+    } catch (error) {
+      console.error('Failed to upload avatar:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBannerUploadClick = () => {
+    bannerInputRef.current?.click();
+  };
+
+  const handleBannerChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUpdating(true);
+      await uploadBanner(file);
+      await fetchProfileData();
+      setIsBannerModalOpen(false);
+    } catch (error) {
+      console.error('Failed to upload banner:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleTemplateSelect = async (url: string) => {
+    try {
+      setIsUpdating(true);
+      await updateProfile({ cover_pic_url: url });
+      await fetchProfileData();
+      setIsBannerModalOpen(false);
+    } catch (error) {
+      console.error('Failed to update banner template:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  if (loading && !profile) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-indigo-500 animate-spin" />
+      </div>
+    );
+  }
   return (
     <div className="flex-1 h-full overflow-y-auto custom-scrollbar">
       <motion.div
@@ -32,22 +170,49 @@ export function Profile() {
       >
         {/* Banner Section */}
         <div className="h-48 md:h-64 w-full relative overflow-hidden">
-          <div className="absolute inset-0 mesh-gradient opacity-60" />
+          {profile?.cover_pic_url ? (
+            <img src={profile.cover_pic_url} alt="Cover" className="w-full h-full object-cover" />
+          ) : (
+            <div className="absolute inset-0 mesh-gradient opacity-60" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
-          <Button variant="glass" size="sm" className="absolute top-6 right-8 gap-2 border-white/10">
+          <Button variant="glass" size="sm" className="absolute top-6 right-8 gap-2 border-white/10" onClick={() => setIsBannerModalOpen(true)}>
             <Camera className="w-4 h-4" />
             Edit Banner
           </Button>
+
+          <input
+            type="file"
+            ref={avatarInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={handleAvatarChange}
+          />
+
+          <input
+            type="file"
+            ref={bannerInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={handleBannerChange}
+          />
         </div>
 
         {/* Profile Info Overlay */}
         <div className="px-8 -mt-20 relative z-10 mb-12">
           <div className="flex flex-col md:flex-row md:items-end gap-6 md:gap-10">
             <div className="relative group">
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2.5rem] bg-gradient-to-br from-indigo-500 to-purple-600 border-[6px] border-[#050505] shadow-2xl flex items-center justify-center text-4xl md:text-5xl font-black text-white">
-                AR
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2.5rem] bg-gradient-to-br from-indigo-500 to-purple-600 border-[6px] border-[#050505] shadow-2xl flex items-center justify-center text-4xl md:text-5xl font-black text-white overflow-hidden">
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  profile?.fullname?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || '?'
+                )}
               </div>
-              <div className="absolute inset-0 rounded-[2.5rem] bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+              <div
+                className="absolute inset-0 rounded-[2.5rem] bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                onClick={handleAvatarClick}
+              >
                 <Camera className="w-8 h-8 text-white" />
               </div>
             </div>
@@ -56,19 +221,19 @@ export function Profile() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3 mb-1">
-                    <h1 className="text-4xl font-black tracking-tighter">Awais Raza</h1>
+                    <h1 className="text-4xl font-black tracking-tighter">{profile?.fullname || 'Unnamed User'}</h1>
                     <div className="px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/10">
-                      PRO Member
+                      {profile?.membership_status || 'Free'} Member
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-bold text-white/40 italic">
-                    <div className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> Islamabad, PK</div>
-                    <div className="flex items-center gap-1.5 text-indigo-400"><LinkIcon className="w-4 h-4" /> awais.dev</div>
-                    <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Joined April 2024</div>
+                    <div className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {profile?.address || 'Location not set'}</div>
+                    <div className="flex items-center gap-1.5 text-indigo-400"><Briefcase className="w-4 h-4" /> {profile?.occupation || 'Occupation not set'}</div>
+                    <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Joined {profile?.joined_at ? new Date(profile.joined_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently'}</div>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <Button variant="primary" icon={Edit2}>Edit Profile</Button>
+                  <Button variant="primary" icon={Edit2} onClick={() => setIsEditModalOpen(true)}>Edit Profile</Button>
                   <Button variant="glass" className="p-3"><Mail className="w-5 h-5" /></Button>
                 </div>
               </div>
@@ -84,13 +249,26 @@ export function Profile() {
             <section className="glass p-8 rounded-[2.5rem]">
               <h3 className="text-sm font-black uppercase tracking-[0.3em] text-white/20 mb-6">About Me</h3>
               <p className="text-sm font-medium leading-relaxed text-white/60 mb-6 italic">
-                Full-stack developer focused on creating high-performance digital tools. I thrive in deep work sessions and am constantly optimizing my workflow.
+                {profile?.about || 'No bio provided yet.'}
               </p>
               <div className="flex gap-4">
-                {[Github, Twitter, Linkedin].map((Icon, i) => (
-                  <button key={i} className="p-3 rounded-2xl bg-white/5 hover:bg-white/10 hover:text-indigo-400 transition-all">
+                {[
+                  { Icon: Github, url: profile?.github_url },
+                  { Icon: Twitter, url: profile?.twitter_url },
+                  { Icon: Linkedin, url: profile?.linkedin_url }
+                ].map(({ Icon, url }, i) => (
+                  <a
+                    key={i}
+                    href={url || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      "p-3 rounded-2xl bg-white/5 hover:bg-white/10 hover:text-indigo-400 transition-all",
+                      !url && "opacity-20 cursor-not-allowed"
+                    )}
+                  >
                     <Icon className="w-5 h-5" />
-                  </button>
+                  </a>
                 ))}
               </div>
             </section>
@@ -120,6 +298,14 @@ export function Profile() {
                   </div>
                 ))}
               </div>
+            </section>
+
+            <section
+              className="glass p-5 rounded-[1.5rem] hover:text-red-400 hover:bg-red-500/10 transition-colors duration-300 cursor-pointer text-white/40 flex items-center gap-4"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-5 h-5 flex-shrink-0" />
+              <h1 className="font-bold">Logout</h1>
             </section>
           </div>
 
@@ -188,6 +374,199 @@ export function Profile() {
           </div>
         </div>
       </motion.div>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        title="Edit Personal Velocity"
+        size="lg"
+      >
+        <form onSubmit={handleUpdateProfile} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Full Name</label>
+              <div className="relative group">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-indigo-400 transition-colors" />
+                <input
+                  type="text"
+                  value={formData.fullname}
+                  onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
+                  placeholder="Your Full Name"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Occupation</label>
+              <div className="relative group">
+                <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-indigo-400 transition-colors" />
+                <input
+                  type="text"
+                  value={formData.occupation}
+                  onChange={(e) => setFormData({ ...formData, occupation: e.target.value })}
+                  placeholder="e.g. Software Engineer"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Location</label>
+              <div className="relative group">
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-indigo-400 transition-colors" />
+                <input
+                  type="text"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  placeholder="e.g. Islamabad, PK"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">GitHub URL</label>
+              <div className="relative group">
+                <Github className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-indigo-400 transition-colors" />
+                <input
+                  type="text"
+                  value={formData.github_url}
+                  onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
+                  placeholder="https://github.com/your-username"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">Twitter URL</label>
+              <div className="relative group">
+                <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-indigo-400 transition-colors" />
+                <input
+                  type="text"
+                  value={formData.twitter_url}
+                  onChange={(e) => setFormData({ ...formData, twitter_url: e.target.value })}
+                  placeholder="https://twitter.com/your-handle"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">LinkedIn URL</label>
+              <div className="relative group">
+                <Linkedin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-indigo-400 transition-colors" />
+                <input
+                  type="text"
+                  value={formData.linkedin_url}
+                  onChange={(e) => setFormData({ ...formData, linkedin_url: e.target.value })}
+                  placeholder="https://linkedin.com/in/your-profile"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 focus:outline-none focus:border-indigo-500/50 transition-all font-bold text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-white/40 ml-1">About / Bio</label>
+            <div className="relative group">
+              <Info className="absolute left-4 top-4 w-4 h-4 text-white/20 group-focus-within:text-indigo-400 transition-colors" />
+              <textarea
+                value={formData.about}
+                onChange={(e) => setFormData({ ...formData, about: e.target.value })}
+                placeholder="Tell us about yourself..."
+                rows={4}
+                className="w-full bg-white/5 border border-white/10 rounded-[2rem] py-4 pl-12 pr-4 focus:outline-none focus:border-indigo-500/50 transition-all font-bold text-sm resize-none"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-4 pt-4">
+            <Button
+              type="button"
+              variant="glass"
+              className="flex-1"
+              onClick={() => setIsEditModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              className="flex-1"
+              disabled={isUpdating}
+            >
+              {isUpdating ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save Changes'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Banner Edit Modal */}
+      <Modal
+        isOpen={isBannerModalOpen}
+        onClose={() => setIsBannerModalOpen(false)}
+        title="Customize Workspace View"
+        size="lg"
+      >
+        <div className="space-y-8">
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-4 ml-1">Pre-added Templates</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {bannerTemplates.map((url, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleTemplateSelect(url)}
+                  className={cn(
+                    "relative aspect-[3/1] rounded-2xl overflow-hidden border-2 transition-all group",
+                    profile?.cover_pic_url === url ? "border-indigo-500 scale-[0.98]" : "border-white/5 hover:border-white/20"
+                  )}
+                >
+                  <img src={url} alt={`Template ${i + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  {profile?.cover_pic_url === url && (
+                    <div className="absolute inset-0 bg-indigo-500/20 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center">
+                        <Star className="w-3 h-3 text-white fill-white" />
+                      </div>
+                    </div>
+                  )}
+                </button>
+              ))}
+              <button
+                onClick={handleBannerUploadClick}
+                className="relative aspect-[3/1] rounded-2xl border-2 border-dashed border-white/10 hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all flex flex-col items-center justify-center gap-2 group"
+              >
+                <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors">
+                  <Camera className="w-4 h-4 text-white/30 group-hover:text-indigo-400" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/20 group-hover:text-white/40">Upload Custom</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="p-6 rounded-[2rem] bg-indigo-500/5 border border-indigo-500/10 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center shrink-0">
+              <Zap className="w-6 h-6 text-indigo-400" />
+            </div>
+            <div>
+              <div className="text-sm font-black text-white/80">Pro Tip</div>
+              <p className="text-[11px] font-bold text-white/40 leading-relaxed">
+                High-resolution cinematic shots (1920x480) work best for maintaining visual velocity across all devices.
+              </p>
+            </div>
+          </div>
+
+          <Button
+            variant="glass"
+            className="w-full py-4 rounded-2xl text-sm font-black uppercase tracking-widest"
+            onClick={() => setIsBannerModalOpen(false)}
+          >
+            Close
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

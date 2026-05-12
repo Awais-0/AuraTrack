@@ -74,7 +74,6 @@ const initialLayouts = {
     { i: 'health', x: 3, y: 0, w: 3, h: 1 },
     { i: 'gaming', x: 3, y: 1, w: 1, h: 1 },
     { i: 'media', x: 4, y: 1, w: 1, h: 1 },
-    { i: 'streak', x: 5, y: 1, w: 1, h: 1 },
     { i: 'overview', x: 0, y: 2, w: 2, h: 2 },
     { i: 'productivity', x: 2, y: 2, w: 2, h: 2 },
     { i: 'goals', x: 4, y: 2, w: 2, h: 2 },
@@ -109,7 +108,10 @@ export function Dashboard() {
   }, []);
 
   const onLayoutChange = (currentLayout: any, allLayouts: any) => {
-    setLayouts(allLayouts);
+    // Only update if actually different to prevent potential infinite loops
+    if (JSON.stringify(allLayouts) !== JSON.stringify(layouts)) {
+      setLayouts(allLayouts);
+    }
   };
 
   return (

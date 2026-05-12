@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session, select
 from app.db.session import get_session
-from app.models.user import User
+from app.models.user import User, UserProfile
 from app.schemas.user import UserCreate, UserOut, Token
 from app.core import security
 from app.core.config import settings
@@ -46,8 +46,19 @@ def signup(
         is_active=user_in.is_active,
     )
     session.add(db_obj)
+    session.flush()  # Flush to get the ID without committing
+
+    # Create user profile
+    profile_obj = UserProfile(
+        user_id=db_obj.id,
+        fullname=user_in.fullname,
+        email=user_in.email,
+    )
+    session.add(profile_obj)
+    
     session.commit()
     session.refresh(db_obj)
+    
     return db_obj
 
 @router.post("/login", response_model=Token)

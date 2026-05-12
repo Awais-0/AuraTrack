@@ -16,7 +16,7 @@ import {
   Activity
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
@@ -30,20 +30,17 @@ const navItems = [
 
 const secondaryItems = [
   { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
-  { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
+  // { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
 ];
 
 export function Sidebar() {
   const location = useLocation();
-  const navigate = useNavigate();
+
   const [collapsed, setCollapsed] = useState(false);
 
   const toggleCollapse = () => setCollapsed(prev => !prev);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+
 
   return (
     <aside
@@ -171,17 +168,20 @@ export function Sidebar() {
 
       {/* Logout button */}
       <div className={cn("p-6", collapsed && "p-4")}>
-        <button
-          onClick={handleLogout}
+        <Link
+          to='/profile'
           className={cn(
-            "flex items-center gap-4 w-full rounded-2xl text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors duration-300",
-            collapsed ? "justify-center px-2 py-3" : "px-4 py-3"
+            "flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group",
+            collapsed && "justify-center px-2",
+            location.pathname === '/profile'
+              ? "bg-white/10 text-white shadow-sm"
+              : "text-white/50 hover:text-white hover:bg-white/5"
           )}
-          title={collapsed ? "Logout" : undefined}
+          title={collapsed ? "Profile" : undefined}
         >
-          <LogOut className="w-5 h-5 flex-shrink-0" />
-          {!collapsed && <span className="font-medium">Logout</span>}
-        </button>
+          <User className="w-5 h-5 flex-shrink-0" />
+          {!collapsed && <span className="font-medium whitespace-nowrap">Profile</span>}
+        </Link>
       </div>
     </aside>
   );

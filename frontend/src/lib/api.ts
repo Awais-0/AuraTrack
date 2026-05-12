@@ -72,3 +72,36 @@ export async function signup(userData: any) {
     body: JSON.stringify(userData),
   });
 }
+
+export async function getProfile() {
+  return apiCall('/api/v1/users/me/profile', {
+    method: 'GET',
+  });
+}
+
+export async function updateProfile(profileData: any) {
+  return apiCall('/api/v1/users/me/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(profileData),
+  });
+}
+
+export async function uploadAvatar(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  return apiCall('/api/v1/users/me/avatar', {
+    method: 'POST',
+    body: formData,
+  });
+}
+
+export async function uploadBanner(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  return apiCall('/api/v1/users/me/banner', {
+    method: 'POST',
+    body: formData,
+  });
+}
