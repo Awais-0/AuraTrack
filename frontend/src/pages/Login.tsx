@@ -4,11 +4,13 @@ import { Activity, Mail, Lock, ArrowRight, Github, Loader2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '@/src/lib/api';
 import { useApi } from '@/src/hooks/useApi';
+import { useAuth } from '../contexts/AuthContext';
 
 export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { loading, error, execute: loginUser } = useApi(login);
+  const { refreshUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -21,6 +23,7 @@ export function Login() {
 
       const data = await loginUser(formData);
       localStorage.setItem('token', data.access_token);
+      await refreshUser();
       navigate('/dashboard');
     } catch (err) {
       // Error is handled by the hook

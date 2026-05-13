@@ -3,15 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import os
 from contextlib import asynccontextmanager
-from app.db.init_db import init_db
 from app.api.v1.api import api_router
 from app.core.config import settings
 from app.core.handlers import setup_handlers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Initialize Database
-    init_db()
+    # Startup: Database initialization is now handled by migrations
     yield
     # Shutdown: Clean up if needed
 

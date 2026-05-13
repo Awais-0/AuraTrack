@@ -18,6 +18,9 @@ import { Profile } from './pages/Profile';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
 import { motion, AnimatePresence } from 'motion/react';
+import Loader from '@/src/components/CustomLoader';
+
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -49,10 +52,18 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
 }
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const token = localStorage.getItem('token');
+  const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
-  if (!token) {
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center mesh-gradient">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -61,89 +72,91 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Auth Routes */}
-        <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
-        <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Auth Routes */}
+          <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
+          <Route path="/signup" element={<PageWrapper><Signup /></PageWrapper>} />
 
-        {/* Protected Life Tracker Routes */}
-        <Route path="/dashboard" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Dashboard /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          {/* Protected Life Tracker Routes */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Dashboard /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/productivity" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Productivity /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/productivity" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Productivity /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/finance" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Finance /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/finance" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Finance /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/health" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Health /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/health" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Health /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/gaming" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Gaming /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/gaming" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Gaming /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/media" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Media /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/media" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Media /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/goals" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Goals /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/goals" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Goals /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/settings" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Settings /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/settings" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Settings /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        <Route path="/profile" element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <PageWrapper><Profile /></PageWrapper>
-            </DashboardLayout>
-          </ProtectedRoute>
-        } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <DashboardLayout>
+                <PageWrapper><Profile /></PageWrapper>
+              </DashboardLayout>
+            </ProtectedRoute>
+          } />
 
-        {/* Fallback */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
-      </Routes>
-    </Router>
+          {/* Fallback */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
