@@ -20,6 +20,7 @@ import {
 import { cn } from '@/src/lib/utils';
 import { Button } from '@/src/components/Button';
 import { Modal } from '@/src/components/Modal';
+import { Dropdown } from '@/src/components/Dropdown';
 
 type MediaType = 'movie' | 'anime' | 'manga' | 'tv_show';
 type MediaStatus = 'planning' | 'active' | 'completed' | 'paused';
@@ -118,6 +119,8 @@ export function Media() {
   const [activeTab, setActiveTab] = useState<MediaType | 'all'>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mediaType, setMediaType] = useState('movie');
+  const [mediaStatus, setMediaStatus] = useState('planning');
 
   const tabs: { id: MediaType | 'all'; label: string; icon: any }[] = [
     { id: 'all', label: 'All', icon: History },
@@ -303,23 +306,27 @@ export function Media() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-wider text-white/30 ml-1">Type</label>
-                <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:ring-1 focus:ring-purple-500/50 outline-none transition-all appearance-none cursor-pointer">
-                  <option value="movie">Movie</option>
-                  <option value="anime">Anime</option>
-                  <option value="manga">Manga</option>
-                  <option value="tv_show">TV Show</option>
-                </select>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-black uppercase tracking-wider text-white/30 ml-1">Status</label>
-                <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm font-bold focus:ring-1 focus:ring-purple-500/50 outline-none transition-all appearance-none cursor-pointer">
-                  <option value="planning">Planning</option>
-                  <option value="active">Active</option>
-                  <option value="completed">Completed</option>
-                </select>
-              </div>
+              <Dropdown
+                label="Type"
+                value={mediaType}
+                onChange={setMediaType}
+                options={[
+                  { label: 'Movie', value: 'movie', icon: Film },
+                  { label: 'Anime', value: 'anime', icon: PlayCircle },
+                  { label: 'Manga', value: 'manga', icon: BookOpen },
+                  { label: 'TV Show', value: 'tv_show', icon: Tv },
+                ]}
+              />
+              <Dropdown
+                label="Status"
+                value={mediaStatus}
+                onChange={setMediaStatus}
+                options={[
+                  { label: 'Planning', value: 'planning', icon: Clock },
+                  { label: 'Active', value: 'active', icon: TrendingUp },
+                  { label: 'Completed', value: 'completed', icon: CheckCircle2 },
+                ]}
+              />
             </div>
 
             <div className="pt-4 flex gap-2">
