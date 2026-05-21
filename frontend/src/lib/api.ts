@@ -105,3 +105,60 @@ export async function uploadBanner(file: File) {
     body: formData,
   });
 }
+
+// Media Library API endpoints
+export async function getMedia(type?: string) {
+  const url = type && type !== 'all' ? `/api/v1/media?type=${type}` : '/api/v1/media';
+  return apiCall(url, {
+    method: 'GET',
+  });
+}
+
+export async function addMedia(mediaData: any) {
+  return apiCall('/api/v1/media', {
+    method: 'POST',
+    body: JSON.stringify(mediaData),
+  });
+}
+
+export async function updateMedia(mediaId: string | number, updateData: any) {
+  return apiCall(`/api/v1/media/${mediaId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updateData),
+  });
+}
+
+export async function deleteMedia(mediaId: string | number) {
+  const token = localStorage.getItem('token');
+  const headers = new Headers();
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+  
+  // Note: delete returns no content (204), so apiCall which does result.json() might fail.
+  // We can fetch directly or handle it. Let's look at apiCall logic:
+  // result = await response.json()
+  // if not ok, error. Else returns result.data.
+  // Since DELETE /media/{id} returns status 204 (No Content), calling response.json() will throw.
+  // Let's implement deleteMedia with a custom fetch to handle 204 status safely:
+  const response = await fetch(`${API_URL}/api/v1/media/${mediaId}`, {
+    method: 'DELETE',
+    headers,
+  });
+
+  if (!response.ok) {
+    let errMessage = 'Delete failed';
+    try {
+      const result = await response.json();
+      errMessage = result.error?.message || result.detail || errMessage;
+    } catch (_) {}
+    throw new Error(errMessage);
+  }
+  return true;
+}
+
+export async function searchTMDB(query: string) {
+  return apiCall(`/api/v1/media/search-tmdb?query=${encodeURIComponent(query)}`, {
+    method: 'GET',
+  });
+}

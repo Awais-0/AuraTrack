@@ -94,7 +94,7 @@ const dummyGames: GameItem[] = [
     playtime: 145,
     achievements: { completed: 35, total: 42 },
     rating: 10.0,
-    coverImage: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?q=80&w=800&auto=format&fit=crop',
+    coverImage: 'public/assets/game_covers/eldenring.webp',
     lastPlayed: '2 hours ago',
     genre: 'Action RPG'
   },
@@ -106,7 +106,7 @@ const dummyGames: GameItem[] = [
     playtime: 85,
     achievements: { completed: 44, total: 44 },
     rating: 9.0,
-    coverImage: 'https://images.unsplash.com/photo-1605898835373-02f74446e8ca?q=80&w=800&auto=format&fit=crop',
+    coverImage: 'public/assets/game_covers/cyberpunk.webp',
     lastPlayed: '1 month ago',
     genre: 'Open World RPG'
   },
@@ -118,7 +118,7 @@ const dummyGames: GameItem[] = [
     playtime: 24,
     achievements: { completed: 12, total: 55 },
     rating: 9.5,
-    coverImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop',
+    coverImage: 'public/assets/game_covers/hadesII.webp',
     lastPlayed: 'Yesterday',
     genre: 'Roguelike'
   },
@@ -130,7 +130,7 @@ const dummyGames: GameItem[] = [
     playtime: 0,
     achievements: { completed: 0, total: 52 },
     rating: 0,
-    coverImage: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=800&auto=format&fit=crop',
+    coverImage: 'public/assets/game_covers/got.jpg',
     lastPlayed: 'Planned',
     genre: 'Action-Adventure'
   },
@@ -142,7 +142,7 @@ const dummyGames: GameItem[] = [
     playtime: 420,
     achievements: { completed: 0, total: 0 },
     rating: 8.0,
-    coverImage: 'https://images.unsplash.com/photo-1552824734-783689408665?q=80&w=800&auto=format&fit=crop',
+    coverImage: 'public/assets/game_covers/valorant.webp',
     lastPlayed: '3 hours ago',
     genre: 'Tactical Shooter'
   }

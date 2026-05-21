@@ -10,6 +10,7 @@ from alembic import context
 from sqlmodel import SQLModel
 from app.core.config import settings
 from app.models.user import User # Import models to register them
+from app.models.media import Media
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

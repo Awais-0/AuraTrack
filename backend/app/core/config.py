@@ -30,4 +30,8 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str = os.getenv("CLOUDINARY_API_KEY")
     CLOUDINARY_API_SECRET: str = os.getenv("CLOUDINARY_API_SECRET")
 
+    # TMDB Settings
+    THE_MOVIE_DB_ACCESS_TOKEN: str = os.getenv("THE_MOVIE_DB_ACCESS_TOKEN", "")
+    THE_MOVIE_DB_API_KEY: str = os.getenv("THE_MOVIE_DB_API_KEY", "")
+
 settings = Settings()
