@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    description="Backend API for AuraTrack productivity tracker",
+    description="Backend API for PulseOS productivity tracker",
     version="0.1.0",
     lifespan=lifespan
 )
@@ -43,7 +43,7 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {
-        "message": "Welcome to AuraTrack API",
+        "message": "Welcome to PulseOS API",
         "status": "online",
         "docs": "/docs"
     }

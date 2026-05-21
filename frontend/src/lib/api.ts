@@ -1,5 +1,5 @@
 /**
- * API Utility for AuraTrack
+ * API Utility for PulseOS
  */
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -32,12 +32,12 @@ export async function fetchRoot() {
 
 async function apiCall(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('token');
-  
+
   const headers = new Headers(options.headers || {});
   if (token && !headers.has('Authorization')) {
     headers.set('Authorization', `Bearer ${token}`);
   }
-  
+
   if (!headers.has('Content-Type') && !(options.body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
   }
@@ -89,7 +89,7 @@ export async function updateProfile(profileData: any) {
 export async function uploadAvatar(file: File) {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   return apiCall('/api/v1/users/me/avatar', {
     method: 'POST',
     body: formData,
@@ -99,7 +99,7 @@ export async function uploadAvatar(file: File) {
 export async function uploadBanner(file: File) {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   return apiCall('/api/v1/users/me/banner', {
     method: 'POST',
     body: formData,
@@ -134,7 +134,7 @@ export async function deleteMedia(mediaId: string | number) {
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
   }
-  
+
   // Note: delete returns no content (204), so apiCall which does result.json() might fail.
   // We can fetch directly or handle it. Let's look at apiCall logic:
   // result = await response.json()
@@ -151,7 +151,7 @@ export async function deleteMedia(mediaId: string | number) {
     try {
       const result = await response.json();
       errMessage = result.error?.message || result.detail || errMessage;
-    } catch (_) {}
+    } catch (_) { }
     throw new Error(errMessage);
   }
   return true;
